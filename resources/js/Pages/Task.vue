@@ -3,8 +3,26 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link} from '@inertiajs/vue3';
 import {PencilSquareIcon} from "@heroicons/vue/24/outline";
 
+interface Paginator {
+    data: [{
+        id: number,
+        url?: string,
+        name: string,
+        hours: number,
+        created_at: string,
+    }],
+    meta: {
+        total: number,
+        links: [{
+            url?: string,
+            label: string,
+            active: boolean,
+        }]
+    }
+}
+
 const props = defineProps<{
-    'paginator': Object
+    'paginator': Paginator
 }>();
 
 </script>
@@ -41,6 +59,7 @@ const props = defineProps<{
                                         <Link
                                                 v-if="task.url"
                                                 class="underline"
+                                                href="#"
                                         >
                                             {{ task.name }}
                                         </Link>
@@ -55,6 +74,7 @@ const props = defineProps<{
                                             <Link
                                                     as="button"
                                                     class="bg-gray-600 rounded px-2 py-0.5 hover:bg-blue-600"
+                                                    href="#"
                                             >
                                                 <PencilSquareIcon class="w-5 h-5"/>
                                             </Link>
@@ -72,9 +92,9 @@ const props = defineProps<{
                                             :disabled="link.url === null"
                                             :href="link.url ?? '#'"
                                             as="button"
+                                            class="px-2 py-1 border border-gray-800 disabled:bg-gray-600"
                                             preserve-scroll
                                             replace
-                                            class="px-2 py-1 border border-gray-800 disabled:bg-gray-600"
                                             v-html="link.label"/>
                                 </div>
                             </div>
@@ -90,6 +110,7 @@ const props = defineProps<{
 table > thead > tr > th {
     @apply border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left
 }
+
 table > tbody > tr > td {
     @apply border-b border-slate-100 dark:border-slate-700 p-2 pl-8 text-slate-500 dark:text-slate-400
 }
