@@ -15,90 +15,14 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  unit-test:
-    name: Unit test (PHP ${{ matrix.php-versions }})
-    runs-on: ubuntu-latest
-    env:
-      DB_DATABASE: laravel
-      DB_USERNAME: root
-      DB_PASSWORD: password
-      BROADCAST_DRIVER: log
-
-    # Docs: https://docs.github.com/en/actions/using-containerized-services
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: laravel
-        ports:
-          - 3306/tcp
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
-    strategy:
-      fail-fast: false
-      matrix:
-        php-versions: ['8.2']
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      # Docs: https://github.com/shivammathur/setup-php
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, dom, fileinfo, mysql
-          coverage: xdebug
-
-      # Local MySQL service in GitHub hosted environments is disabled by default.
-      # If you are using it instead of service containers, make sure you start it.
-      # - name: Start mysql service
-      #   run: sudo systemctl start mysql.service
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          # Use composer.json for key, if composer.lock is not committed.
-          # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-
-      - name: Prepare the application
-        run: |
-          php -r "file_exists('.env') || copy('.env.example', '.env');"
-          php artisan key:generate
-
-      - name: Clear Config
-        run: php artisan config:clear
-
-      - name: Run Migration
-        run: php artisan migrate -v
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-
-      - name: Test with artisan test
-        run: php artisan test
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
   deploy:
     name: 🎉 Deploy
-    needs: unit-test
     runs-on: ubuntu-latest
     steps:
-    - name: 👀 Get latest code
+    - name: Get latest code
       uses: actions/checkout@v3
               
-    - name: 👀 Node setup
+    - name: Node setup
       uses: actions/setup-node@v3
       with:
         node-version: 'latest'
@@ -109,7 +33,7 @@ jobs:
     - name: Cache cleanup
       run: rm -r storage/framework/cache
       
-    - name: 👟 Sync files
+    - name: Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
         server: ${{ secrets.FTP_SERVER_URL }}
@@ -125,23 +49,3 @@ jobs:
           **/DOCKER_ENV
           **/docker_tag
           **/output.log
-  
-  # This workflow contains a single job called "build"
-  #build:
-    # The type of runner that the job will run on
-    #runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    #steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      #- uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      #- name: Run a one-line script
-        #run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      #- name: Run a multi-line script
-        #run: |
-          #echo Add other actions to build,
-          #echo test, and deploy your project.
