@@ -128,10 +128,10 @@ table > thead > tr > th {
 }
 
 table > tbody > tr > td {
-    @apply border-b border-slate-100 dark:border-slate-700 p-2 pl-8 text-slate-500 dark:text-slate-400
+    @apply border-b border-slate-100 dark:border-slate-700 px-2 py-1 pl-8 text-slate-500 dark:text-slate-400
 }
 
 table > tbody > tr {
-    @apply hover:bg-slate-700
+    @apply hover:bg-slate-700 even:bg-slate-800
 }
 </style>

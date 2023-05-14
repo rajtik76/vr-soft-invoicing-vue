@@ -5,6 +5,9 @@ import {Head, router} from "@inertiajs/vue3";
 import UpdateTaskForm from "@/Pages/Task/Partials/TaskForm.vue";
 import {Task} from "@/types/task";
 import DangerButton from "@/Components/DangerButton.vue";
+import Panel from "@/Components/Panel.vue";
+import PanelHeader from "@/Components/PanelHeader.vue";
+import PanelContent from "@/Components/PanelContent.vue";
 
 const props = defineProps<{
     task: Task,
@@ -28,24 +31,16 @@ function deleteTask() {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <Panel>
                     <UpdateTaskForm :contracts="contracts" :task="task"/>
-                </div>
+                </Panel>
 
-                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                    <section>
-                        <header>
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Task deletion</h2>
-
-                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                Delete current task. Deleted task can't be restored so please take with care!
-                            </p>
-                        </header>
-                        <div class="mt-6 space-y-6">
-                            <DangerButton @click.prevent="deleteTask">Delete Task</DangerButton>
-                        </div>
-                    </section>
-                </div>
+                <Panel>
+                    <PanelHeader title="Task deletion" description="Delete current task. Deleted task can't be restored so please take with care!"/>
+                    <PanelContent>
+                        <DangerButton @click.prevent="deleteTask">Delete Task</DangerButton>
+                    </PanelContent>
+                </Panel>
             </div>
         </div>
     </AuthenticatedLayout>
