@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => Session::get('success'),
             ],
+            'taskActive' => Session::get('task.active', true),
         ]);
     }
 }

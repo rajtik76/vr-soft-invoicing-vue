@@ -8,23 +8,32 @@ use App\Http\Resources\TaskIndexResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Contract;
 use App\Models\Task;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class TaskController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
         return Inertia::render('Task/Index', [
-            'paginator' => TaskIndexResource::collection(
-                Task::with('contract')
+            'tasks' => TaskIndexResource::collection(
+                Task::with('contract.customer')
                     ->withSum('spentTimes', 'time')
                     ->where('user_id', Auth::id())
-                    ->latest()
+                    ->where('active', Session::get('task.active', true))
+                    ->when($request->has('sort'), function (Builder $query) use ($request) {
+                        collect($request->get('sort'))->each(function ($value, $key) use ($query) {
+                            $query->orderBy($key, $value);
+                        });
+                    })
                     ->paginate(10)
+                    ->withQueryString()
             ),
         ]);
     }
@@ -81,5 +90,12 @@ class TaskController extends Controller
         $task->delete();
 
         return to_route('task.index')->with('success', 'Task `' . $taskName . '` was successfully deleted');
+    }
+
+    public function toggleActive(): RedirectResponse
+    {
+        Session::put('task.active', !Session::get('task.active', true));
+
+        return to_route('task.index');
     }
 }

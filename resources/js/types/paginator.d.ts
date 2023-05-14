@@ -1,4 +1,5 @@
-interface PaginatorWithMeta {
+export interface Paginator {
+    data: any,
     meta: {
         total: number,
         links: [{
@@ -9,7 +10,7 @@ interface PaginatorWithMeta {
     }
 }
 
-export interface PaginatorTask extends PaginatorWithMeta {
+export interface PaginatorTask extends Paginator {
     data: [{
         id: number,
         url?: string,

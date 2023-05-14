@@ -1,13 +1,44 @@
 <script lang="ts" setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link, router} from '@inertiajs/vue3';
-import {PencilSquareIcon} from "@heroicons/vue/24/outline";
 import {PaginatorTask} from "@/types/paginator";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import {GridColumns} from "@/types/grid";
+import Grid from "@/Components/Grid.vue";
+import {PencilSquareIcon} from "@heroicons/vue/24/outline";
 
 const props = defineProps<{
-    'paginator': PaginatorTask
+    tasks: PaginatorTask
 }>();
+
+const gridColumns = <GridColumns>[
+    {
+        name: 'customer',
+        title: 'Customer',
+    },
+    {
+        name: 'name',
+        title: 'Name',
+        sort: true
+    },
+    {
+        name: 'hours',
+        title: 'Hours',
+    },
+    {
+        name: 'created_at',
+        title: 'Created',
+        sort: true,
+        default: {
+            sort: true,
+            sortOrder: 'desc'
+        }
+    },
+]
+
+function toggleActive() {
+    router.post(route('task.toggle-active'))
+}
 
 </script>
 
@@ -21,76 +52,64 @@ const props = defineProps<{
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <!-- Top panel -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div class="text-right">
-                            <PrimaryButton @click.prevent="router.get(route('task.create'))">Create New Task</PrimaryButton>
-                        </div>
-                        <div class="shadow-sm overflow-hidden my-8">
-                            <table v-if="paginator.meta.total" class="border-collapse table-auto w-full text-sm">
-                                <thead>
-                                <tr>
-                                    <th>Customer</th>
-                                    <th>Name</th>
-                                    <th>Hours</th>
-                                    <th>Created</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-slate-800">
-                                <tr
-                                    v-for="task in paginator.data"
-                                    :key="task.id"
-                                    class="hover:bg-gray-700"
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input :checked="$page.props.taskActive" class="sr-only peer" type="checkbox"
+                                           @change="toggleActive">
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <span
+                                        class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Active Task</span>
+                                </label>
+                            </div>
+                            <div>
+                                <PrimaryButton class="!bg-green-600 hover:!bg-green-400"
+                                               @click.prevent="router.get(route('task.create'))"
                                 >
-                                    <td>{{ task.customer.name }}</td>
-                                    <td>
-                                        <a
-                                            v-if="task.url"
-                                            class="underline"
-                                            :href="task.url"
-                                            target="_blank"
-                                        >
-                                            {{ task.name }}
-                                        </a>
-                                        <span v-else>
-                                        {{ task.name }}
-                                    </span>
-                                    </td>
-                                    <td>{{ task.hours }}</td>
-                                    <td>{{ task.created_at }}</td>
-                                    <td>
-                                        <div class="flex gap-1 my-0.5">
-                                            <Link
-                                                as="button"
-                                                class="bg-gray-600 rounded p-2 hover:bg-blue-600"
-                                                :href="route('task.edit', {task: task.id})"
-                                            >
-                                                <PencilSquareIcon class="w-5 h-5"/>
-                                            </Link>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="flex pt-6 pl-8 text-sm">
-                                <div
-                                    v-for="link in paginator.meta.links"
-                                    :key="link.label">
-                                    <Link
-                                        :class="{'bg-gray-200 text-black': link.active, 'bg-gray-900': !link.active}"
-                                        :disabled="link.url === null"
-                                        :href="link.url ?? '#'"
-                                        as="button"
-                                        class="px-2 py-1 border border-gray-800 disabled:bg-gray-600"
-                                        preserve-scroll
-                                        replace
-                                        v-html="link.label"/>
-                                </div>
+                                    Create New Task
+                                </PrimaryButton>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Grid -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-4">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <div class="shadow-sm overflow-hidden my-8">
+                            <Grid :columns="gridColumns" :data="tasks" :withActions="true">
+                                <template #name="{ row }">
+                                    <span v-if="row.url">
+                                        <a
+                                            :href="row.url"
+                                            class="underline"
+                                            target="_blank"
+                                        >
+                                            {{ row.name }}
+                                        </a>
+                                    </span>
+                                    <span v-else>{{ row.name }}</span>
+                                </template>
+                                <template #action="{ row }">
+                                    <div class="flex gap-1 my-0.5">
+                                        <Link
+                                            :href="route('task.edit', {task: row.id})"
+                                            as="button"
+                                            class="bg-gray-600 rounded py-1 px-3 !bg-blue-800 hover:!bg-blue-500"
+                                        >
+                                            <PencilSquareIcon class="w-5 h-5 text-white"/>
+                                        </Link>
+                                    </div>
+                                </template>
+                            </Grid>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </AuthenticatedLayout>
