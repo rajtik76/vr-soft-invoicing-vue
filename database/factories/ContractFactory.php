@@ -25,7 +25,7 @@ class ContractFactory extends Factory
             'supplier_id' => Supplier::factory(),
             'customer_id' => Customer::factory(),
             'bank_account_id' => BankAccount::factory(),
-            'number' => fake()->slug(),
+            'number' => fake()->creditCardNumber(),
             'signed_at' => fake()->date(),
             'price_per_unit' => fake()->randomFloat(1, 10, 50),
         ];

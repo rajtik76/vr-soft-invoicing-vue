@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            UserSeeder::class,
             ContractSeeder::class,
             TaskSeeder::class,
             TaskSpentTimeSeeder::class,
