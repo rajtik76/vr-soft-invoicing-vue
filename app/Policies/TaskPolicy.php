@@ -10,10 +10,10 @@ class TaskPolicy
 {
     use HandlesAuthorization;
 
-//    public function viewAny(User $user): bool
-//    {
-//
-//    }
+    //    public function viewAny(User $user): bool
+    //    {
+    //
+    //    }
 
     public function update(User $user, Task $task): bool
     {

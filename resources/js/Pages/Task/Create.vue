@@ -7,10 +7,7 @@ import {Task} from "@/types/task";
 
 defineProps<{
     task: Task,
-    contracts: [{
-        id: number,
-        name: string,
-    }]
+    contracts: { [key: string]: string }
 }>()
 </script>
 

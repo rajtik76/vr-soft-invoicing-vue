@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
 // Auth + verified
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/task', TaskController::class);
+    Route::post('/task/toggle-active', [TaskController::class, 'toggleActive'])->name('task.toggle-active');
 });
 
 require __DIR__.'/auth.php';
