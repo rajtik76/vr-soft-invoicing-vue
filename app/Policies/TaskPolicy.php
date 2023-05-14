@@ -15,19 +15,21 @@ class TaskPolicy
 //
 //    }
 
-    public function view(User $user, Task $task): bool
+    public function update(User $user, Task $task): bool
     {
-        return $task->user_id === $user->id;
+        return $this->view($user, $task);
     }
 
 //    public function create(User $user): bool
 //    {
 //    }
 //
-//    public function update(User $user, Task $task): bool
-//    {
-//    }
-//
+
+    public function view(User $user, Task $task): bool
+    {
+        return $task->user_id === $user->id;
+    }
+
     public function delete(User $user, Task $task): bool
     {
         return $task->user_id;

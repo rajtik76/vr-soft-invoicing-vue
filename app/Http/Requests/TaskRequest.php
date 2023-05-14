@@ -23,6 +23,6 @@ class TaskRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return !Request::isMethod('patch') || $this->task->user_id === Auth::id();
+        return !Request::isMethod('patch') || Auth::user()->can('update', $this->task);
     }
 }
