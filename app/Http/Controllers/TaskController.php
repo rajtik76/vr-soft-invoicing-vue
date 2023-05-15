@@ -92,10 +92,10 @@ class TaskController extends Controller
         return to_route('task.index')->with('success', 'Task `' . $taskName . '` was successfully deleted');
     }
 
-    public function toggleActive(): RedirectResponse
+    public function toggleActive(Request $request): RedirectResponse
     {
         Session::put('task.active', !Session::get('task.active', true));
 
-        return to_route('task.index');
+        return redirect(url()->previous());
     }
 }
