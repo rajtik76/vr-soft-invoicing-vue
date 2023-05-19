@@ -2,8 +2,8 @@
 import {onMounted, ref} from 'vue';
 
 defineProps<{
-    modelValue: any,
-    options?: { [key: string]: string }
+    modelValue: string | number | boolean | null,
+    options: Array<Record<string, any>> | null
 }>();
 
 defineEmits(['update:modelValue']);

@@ -17,7 +17,7 @@ class TaskIndexResource extends JsonResource
             'url' => $this->url,
             'note' => $this->note,
             'active' => $this->active,
-            'hours' => number_format($this->spent_times_sum_time, 1),
+            'hours' => number_format($this->spent_times_sum_time ?? 0, 1),
             'customer' => $this->contract->customer->name,
             'created_at' => $this->created_at->toDateTimeString(),
         ];

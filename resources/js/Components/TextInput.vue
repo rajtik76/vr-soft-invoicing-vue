@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 
 defineProps<{
-    modelValue: string;
+    modelValue: string | null;
 }>();
 
 defineEmits(['update:modelValue']);
@@ -26,3 +26,4 @@ defineExpose({ focus: () => input.value?.focus() });
         ref="input"
     />
 </template>
+

@@ -3,38 +3,42 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link, router} from '@inertiajs/vue3';
 import {PaginatorTask} from "@/types/paginator";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {GridColumns} from "@/types/grid";
-import Grid from "@/Components/Grid.vue";
+import BaseGrid from "@/Components/BaseGrid.vue";
 import {PencilSquareIcon} from "@heroicons/vue/24/outline";
 import Panel from "@/Components/Panel.vue";
+import {TaskResource} from "@/types/resource";
+import {GridColumn} from "@/types/grid";
 
 const props = defineProps<{
     tasks: PaginatorTask
 }>();
 
-const gridColumns = <GridColumns>[
+const gridColumns: Array<GridColumn> = [
     {
         name: 'customer',
-        title: 'Customer',
+        label: 'Customer',
     },
     {
         name: 'name',
-        title: 'Name',
-        sort: true
+        label: 'Name',
+        sortable: true
     },
     {
         name: 'hours',
-        title: 'Hours',
+        label: 'Hours',
     },
     {
         name: 'created_at',
-        title: 'Created',
-        sort: true,
+        label: 'Created',
+        sortable: true,
         default: {
-            sort: true,
-            sortOrder: 'desc'
+            sort: 'desc'
         }
     },
+    {
+        name: 'action',
+        label: 'Action'
+    }
 ]
 
 function toggleActive() {
@@ -55,24 +59,12 @@ function toggleActive() {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <!-- Top panel -->
                 <Panel>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input :checked="$page.props.taskActive" class="sr-only peer" type="checkbox"
-                                       @change="toggleActive">
-                                <div
-                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                <span
-                                    class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Active Task</span>
-                            </label>
-                        </div>
-                        <div>
-                            <PrimaryButton class="!bg-green-600 hover:!bg-green-400"
-                                           @click.prevent="router.get(route('task.create'))"
-                            >
-                                Create New Task
-                            </PrimaryButton>
-                        </div>
+                    <div>
+                        <PrimaryButton class="!bg-green-600 hover:!bg-green-400"
+                                       @click.prevent="router.get(route('task.create'))"
+                        >
+                            Create New Task
+                        </PrimaryButton>
                     </div>
                 </Panel>
 
@@ -80,8 +72,8 @@ function toggleActive() {
                 <Panel class="mt-4">
                     <div class="text-gray-900 dark:text-gray-100">
                         <div class="shadow-sm overflow-hidden">
-                            <Grid :columns="gridColumns" :data="tasks" :withActions="true">
-                                <template #name="{ row }">
+                            <BaseGrid :columns="gridColumns" :grid-url="route('grid.task')">
+                                <template #name="{ row }: { row: TaskResource }">
                                     <span v-if="row.url">
                                         <a
                                             :href="row.url"
@@ -93,7 +85,7 @@ function toggleActive() {
                                     </span>
                                     <span v-else>{{ row.name }}</span>
                                 </template>
-                                <template #action="{ row }">
+                                <template #action="{ row }: { row: TaskResource }">
                                     <div class="flex gap-1 my-0.5">
                                         <Link
                                             :href="route('task.edit', {task: row.id})"
@@ -104,7 +96,7 @@ function toggleActive() {
                                         </Link>
                                     </div>
                                 </template>
-                            </Grid>
+                            </BaseGrid>
                         </div>
                     </div>
                 </Panel>

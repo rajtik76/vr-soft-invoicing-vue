@@ -10,7 +10,7 @@ import Select from "@/Components/Select.vue";
 
 const props = defineProps<{
     task: Task,
-    contracts: { [key:string]: string }
+    contracts: Array<Record<string, string>>
 }>()
 
 const form = useForm({
@@ -57,7 +57,6 @@ function sendData() {
                     autofocus
                     class="mt-1 block w-full"
                     required
-                    type="text"
                 />
 
                 <InputError :message="form.errors.url" class="mt-2"/>

@@ -41,9 +41,8 @@ class HandleInertiaRequests extends Middleware
                 ]);
             },
             'flash' => [
-                'success' => Session::get('success'),
+                'success' => strval(Session::get('success')),
             ],
-            'taskActive' => Session::get('task.active', true),
         ]);
     }
 }

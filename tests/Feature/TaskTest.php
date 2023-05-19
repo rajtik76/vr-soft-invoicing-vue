@@ -70,19 +70,6 @@ class TaskTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_task_filter_toggle_works()
-    {
-        $response = $this->actingAs($this->user)->post('/task/toggle-active');
-
-        $response->assertRedirect('/task');
-        $this->assertFalse(Session::get('task.active'));
-
-        $this->actingAs($this->user)->post('/task/toggle-active');
-
-        $response->assertRedirect('/task');
-        $this->assertTrue(Session::get('task.active'));
-    }
-
     public function test_task_created_successfully()
     {
         $contract = Contract::factory()->create();

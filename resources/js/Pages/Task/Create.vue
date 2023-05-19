@@ -8,7 +8,7 @@ import Panel from "@/Components/Panel.vue";
 
 defineProps<{
     task: Task,
-    contracts: { [key: string]: string }
+    contracts: Array<Record<string, string>>
 }>()
 </script>
 

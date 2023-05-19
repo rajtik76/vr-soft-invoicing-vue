@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\Grid\TaskSpentTimeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\TimeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,8 +30,24 @@ Route::middleware('auth')->group(function () {
 
 // Auth + verified
 Route::middleware(['auth', 'verified'])->group(function () {
+
+    // Task
     Route::resource('/task', TaskController::class);
     Route::post('/task/toggle-active', [TaskController::class, 'toggleActive'])->name('task.toggle-active');
+
+    // Time
+    Route::resource('/time', TimeController::class)->except(['show']);
+
+    // Grids
+    Route::prefix('/grid')->name('grid.')->group(function () {
+
+        // Time log grid
+        Route::post('/time', TaskSpentTimeController::class)->name('time');
+        // Task grid
+        Route::post('/task', \App\Http\Controllers\Grid\TaskController::class)->name('task');
+
+    });
+
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
