@@ -38,7 +38,7 @@ defineExpose({updateGrid})
 
 const page = ref<string>('1')
 const sort = ref<SortArray>([])
-const filter = ref<Record<string, number | boolean | string | null> | {}>({})
+const filter = ref<Record<string, number | boolean | string | null>>({})
 const search = useDebouncedRef('', 500)
 const paginator = ref<Paginator | null>(null)
 const process = ref(false)
@@ -175,9 +175,8 @@ function changePage(url: string | null) {
  */
 function initFilters() {
   filterableColumns.value.forEach(column => {
-
     if (column.default?.filter) {
-      filter.value[column.name] = column.default?.filter
+      filter.value[column.name] = column.default?.filter ?? null
     } else {
       filter.value[column.name] = null
     }
@@ -275,16 +274,19 @@ const filterableColumns = computed(() => {
 
         <!-- Column filters -->
         <tr v-if="filterableColumns.length > 0" class="border-t border-gray-500">
-          <th v-for="column in filterableColumns" :key="'filter-' + column.name">
+          <th v-for="column in columns" :key="'filter-' + column.name" class="bg-gray-800">
             <BaseSelect
+              v-if="column.filterable"
               v-model="filter[column.name]"
               :options="column.filterOptions ?? {}"
-              class="w-full text-sm px-6 !bg-gray-800"
+              class="w-full text-sm !bg-gray-800"
               @change="updateGrid"
             />
           </th>
         </tr>
         </thead>
+
+        <!-- Table body -->
         <tbody>
         <tr v-for="row in paginator.data" :key="row[0]"
             class="bg-gray-800 border-b border-gray-700 hover:!bg-gray-900 text-slate-400">
