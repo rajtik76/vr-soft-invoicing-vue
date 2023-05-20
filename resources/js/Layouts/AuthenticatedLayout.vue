@@ -34,7 +34,7 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :active="$page.component.startsWith('Task/')" :href="route('task.index')">
                                     Task
                                 </NavLink>
-                                <NavLink :active="$page.component.startsWith('Time/')" :href="route('time.index')">
+                                <NavLink :active="$page.component.startsWith('TaskSpentTime/')" :href="route('taskSpentTime.index')">
                                     Time
                                 </NavLink>
                             </div>

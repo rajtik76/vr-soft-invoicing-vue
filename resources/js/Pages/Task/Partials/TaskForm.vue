@@ -10,7 +10,7 @@ import Select from "@/Components/Select.vue";
 
 const props = defineProps<{
     task: Task,
-    contracts: Array<Record<string, string>>
+    contracts: Record<string, string>
 }>()
 
 const form = useForm({

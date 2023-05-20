@@ -1,3 +1,5 @@
+import {TaskResource} from "@/types/resource";
+
 export interface Paginator {
     data: any,
     meta: {
@@ -21,4 +23,17 @@ export interface PaginatorTask extends Paginator {
         },
         created_at: string,
     }]
+}
+
+export interface PaginatorTaskSpentTime extends Paginator {
+    data: [
+        {
+            id: number,
+            task_id: number,
+            task: TaskResource,
+            date: string,
+            time: number,
+            note: string | null
+        }
+    ]
 }

@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Grid\TaskSpentTimeController;
+use App\Http\Controllers\Grid\TaskShowController;
+use App\Http\Controllers\Grid\TaskSpentTimesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
-use App\Http\Controllers\TimeController;
+use App\Http\Controllers\TaskSpentTimeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,18 +34,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Task
     Route::resource('/task', TaskController::class);
-    Route::post('/task/toggle-active', [TaskController::class, 'toggleActive'])->name('task.toggle-active');
 
-    // Time
-    Route::resource('/time', TimeController::class)->except(['show']);
+    // Task spent time
+    Route::resource('/taskSpentTime', TaskSpentTimeController::class);
 
     // Grids
     Route::prefix('/grid')->name('grid.')->group(function () {
 
-        // Time log grid
-        Route::post('/time', TaskSpentTimeController::class)->name('time');
+        // TaskSpentTime log grid
+        Route::post('/taskSpentTime', TaskSpentTimesController::class)->name('taskSpentTime');
+
         // Task grid
         Route::post('/task', \App\Http\Controllers\Grid\TaskController::class)->name('task');
+
+        // Task show grid
+        Route::post('/task/show', TaskShowController::class)->name('task.show');
 
     });
 

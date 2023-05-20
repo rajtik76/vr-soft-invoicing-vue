@@ -9,7 +9,7 @@ use App\Services\GridComponentHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
-class TaskSpentTimeController extends Controller
+class TaskSpentTimesController extends Controller
 {
     public function __invoke(GridComponentHandler $handler): JsonResponse
     {
@@ -21,7 +21,7 @@ class TaskSpentTimeController extends Controller
                     ->with('task')
                     ->whereHas(
                         'task',
-                        fn ($query) => $query->where('user_id', Auth::id())
+                        fn ($query) => $query->where('user_id', Auth::id())->where('active', true)
                     )
                 )
         );
