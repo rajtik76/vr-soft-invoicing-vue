@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {customRef, onMounted, ref, watch} from "vue";
+import {computed, customRef, onMounted, ref, watch} from "vue";
 import axios from "axios";
 import {GridColumn, Paginator} from "@/types/grid";
 import {Bars3Icon, BarsArrowDownIcon, BarsArrowUpIcon} from "@heroicons/vue/24/outline";
@@ -38,6 +38,7 @@ defineExpose({updateGrid})
 
 const page = ref<string>('1')
 const sort = ref<SortArray>([])
+const filter = ref<Record<string, number | boolean | string | null> | {}>({})
 const search = useDebouncedRef('', 500)
 const paginator = ref<Paginator | null>(null)
 const process = ref(false)
@@ -84,6 +85,7 @@ function getPostData(): PostData {
 
   const postData = {
     sort: Object.fromEntries(sort.value),
+    filter: filter.value,
     search: search.value,
     page: page.value,
     perPage: perPage.value
@@ -168,12 +170,25 @@ function changePage(url: string | null) {
   updateGrid()
 }
 
-watch([perPage, search], (value) => {
-  page.value = '1'
-  updateGrid()
-})
+/**
+ * Initialize filter values. Use default value if provided
+ */
+function initFilters() {
+  filterableColumns.value.forEach(column => {
+
+    if (column.default?.filter) {
+      filter.value[column.name] = column.default?.filter
+    } else {
+      filter.value[column.name] = null
+    }
+  })
+}
 
 onMounted(() => {
+
+  // initialize filters
+  initFilters()
+
   // get default sort
   sort.value = getDefaultSortData()
 
@@ -181,6 +196,23 @@ onMounted(() => {
   if (props.updateOnStart) {
     updateGrid()
   }
+})
+
+/*
+ * Watchers
+ */
+
+watch([perPage, search], (value) => {
+  page.value = '1'
+  updateGrid()
+})
+
+/*
+ * Computed
+ */
+
+const filterableColumns = computed(() => {
+  return props.columns.filter(column => column.filterable)
 })
 
 </script>
@@ -222,6 +254,7 @@ onMounted(() => {
       <table class="w-full text-sm text-left text-gray-200">
         <thead class="text-base text-gray-200 bg-gray-700 border-b border-gray-600">
         <tr>
+          <!-- Columns header -->
           <th v-for="column in columns" :key="column.name" class="px-6 py-4" scope="col">
                         <span class="flex items-center gap-2">
                             <span>
@@ -237,6 +270,18 @@ onMounted(() => {
                             </span>
                             {{ column.label }}
                         </span>
+          </th>
+        </tr>
+
+        <!-- Column filters -->
+        <tr v-if="filterableColumns.length > 0" class="border-t border-gray-500">
+          <th v-for="column in filterableColumns" :key="'filter-' + column.name">
+            <BaseSelect
+              v-model="filter[column.name]"
+              :options="column.filterOptions ?? {}"
+              class="w-full text-sm px-6 !bg-gray-800"
+              @change="updateGrid"
+            />
           </th>
         </tr>
         </thead>

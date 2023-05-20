@@ -15,12 +15,14 @@ class GridComponentHandler implements JsonSerializable
 {
     protected int $page;
     protected int $perPage = 10;
-    protected array $sort;
+    protected array $sort = [];
+    protected array $filter = [];
     protected string|null $search;
     protected Builder $builder;
     protected string|null $resource = null;
     protected array $sortClosure = [];
     protected array $searchClosure = [];
+    protected array $filterClosure = [];
 
     public function __construct(protected Request $request)
     {
@@ -58,20 +60,29 @@ class GridComponentHandler implements JsonSerializable
         return $this;
     }
 
+    public function setFilterClosure(string $column, Closure $closure): GridComponentHandler
+    {
+        $this->filterClosure[$column] = $closure;
+
+        return $this;
+    }
+
+
     public function jsonSerialize(): array
     {
         // store data from request
         $this->page = intval(request()->get('page', 1));
         $this->perPage = intval(request()->get('perPage', 15));
         $this->sort = request()->get('sort', []);
+        $this->filter = request()->get('filter', []);
         $this->search = request()->get('search');
 
         $this->builder = Pipeline::send($this->builder)->through([
-            // SORT
+            // Sort
             function (Builder $builder, Closure $next) {
                 if ($this->sort) {
                     collect($this->sort)->each(
-                        fn (string $order, string $column) => Arr::has($this->sortClosure, $column)
+                        fn(string $order, string $column) => Arr::has($this->sortClosure, $column)
                             ? call_user_func_array($this->sortClosure[$column], ['builder' => $builder, 'order' => $order])
                             : $builder->orderBy($column, $order)
                     );
@@ -79,14 +90,30 @@ class GridComponentHandler implements JsonSerializable
 
                 return $next($builder);
             },
-            // SEARCH
+            // Search
             function (Builder $builder, Closure $next) {
                 if ($this->searchClosure && $this->search) {
-                    collect($this->searchClosure)->each(fn (Closure $sort, string $column) => call_user_func_array($sort, ['search' => $this->search, 'builder' => $builder]));
+                    collect($this->searchClosure)->each(fn(Closure $sort, string $column) => call_user_func_array($sort, ['search' => $this->search, 'builder' => $builder]));
                 }
 
                 return $next($builder);
-            }
+            },
+            // Filter
+            function (Builder $builder, Closure $next) {
+                if ($this->filter) {
+                    collect($this->filter)
+                        ->filter(
+                            fn($filter) => !(is_null($filter) || $filter === '')
+                        )
+                        ->each(
+                            fn(string $value, string $column) => Arr::has($this->filterClosure, $column)
+                                ? call_user_func_array($this->filterClosure[$column], ['builder' => $builder, 'value' => $value])
+                                : $builder->where($column, $value)
+                        );
+                }
+
+                return $next($builder);
+            },
         ])->thenReturn();
 
         // get paginator and set current page + per page

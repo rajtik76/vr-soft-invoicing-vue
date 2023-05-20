@@ -21,7 +21,10 @@ export interface GridColumn {
     label: string,
     searchable?: boolean,
     sortable?: boolean,
+    filterable?: boolean,
+    filterOptions?: Record<(number | boolean | string), string>
     default?: {
-        sort?: 'asc' | 'desc'
+        sort?: 'asc' | 'desc',
+        filter?: (number | boolean | string)
     }
 }

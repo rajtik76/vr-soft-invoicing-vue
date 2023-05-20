@@ -3,7 +3,7 @@ import {computed, onMounted, ref} from 'vue';
 
 const props = defineProps<{
     modelValue: string | number | boolean | null,
-    options: Record<string, string | number>
+    options: Record<(number | boolean | string), string | number>
 }>();
 
 defineEmits(['update:modelValue']);

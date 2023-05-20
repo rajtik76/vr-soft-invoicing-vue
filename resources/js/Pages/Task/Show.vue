@@ -10,7 +10,8 @@ import {GridColumn} from "@/types/grid";
 import {ref} from "vue";
 
 const props = defineProps<{
-  task: TaskResource
+  task: TaskResource,
+  hours: number,
 }>();
 
 const {gridColumns, deleteTimeRecord, editTimeRecord} = useTaskSpentTimeGrid()
@@ -33,10 +34,14 @@ function deleteTimeLogRecordWithHook(id: number) {
 
   <AuthenticatedLayout>
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Task <span class="text-gray-400">{{
-          task.name
-        }}</span>
-        Detail</h2>
+      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-500 leading-tight flex justify-between">
+        <div>
+          Task: <span class="text-gray-200">{{ task.name }}</span>
+        </div>
+        <div>
+          Total: <span class="text-gray-200">{{ hours }}</span> hours
+        </div>
+      </h2>
     </template>
 
     <div class="py-12">
