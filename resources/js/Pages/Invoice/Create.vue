@@ -2,34 +2,29 @@
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Head} from "@inertiajs/vue3";
-import UpdateTaskForm from "@/Pages/Task/Partials/TaskForm.vue";
-import {Task} from "@/types/task";
 import Panel from "@/Components/Panel.vue";
+import InvoiceForm from "@/Pages/Invoice/Partials/InvoiceForm.vue";
 
-defineProps<{
-    task: Task,
-    contracts: Record<string, string>
+const props = defineProps<{
+    contracts: Record<number, string>
 }>()
+
 </script>
 
 <template>
-    <Head title="Task Create"/>
+    <Head title="Create Invoice"/>
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Task Create</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Create Invoice</h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <Panel>
-                    <UpdateTaskForm :contracts="contracts" :task="task"/>
+                    <InvoiceForm :contracts="contracts" />
                 </Panel>
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
-
-<style lang="postcss" scoped>
-
-</style>

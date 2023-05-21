@@ -11,7 +11,7 @@ import PanelContent from "@/Components/PanelContent.vue";
 
 const props = defineProps<{
     task: Task,
-    contracts: { [key: string]: string }
+    contracts: Record<string, string>
 }>()
 
 function deleteTask() {

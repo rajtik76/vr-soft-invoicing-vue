@@ -3,17 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
-use App\Http\Resources\ContractWithCustomerOptionsResource;
-use App\Http\Resources\TaskIndexResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Contract;
 use App\Models\Task;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\TaskSpentTime;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,19 +19,20 @@ class TaskController extends Controller
     public function index(Request $request): Response
     {
         return Inertia::render('Task/Index', [
-            'tasks' => TaskIndexResource::collection(
-                Task::with('contract.customer')
-                    ->withSum('spentTimes', 'time')
-                    ->where('user_id', Auth::id())
-                    ->where('active', Session::get('task.active', true))
-                    ->when($request->has('sort'), function (Builder $query) use ($request) {
-                        collect($request->get('sort'))->each(function ($value, $key) use ($query) {
-                            $query->orderBy($key, $value);
-                        });
-                    })
-                    ->paginate(10)
-                    ->withQueryString()
-            ),
+            'contracts' => Arr::add(
+                array: Contract::all()
+                    ->mapWithKeys(fn(Contract $contract, $key) => [$contract->id => $contract->customer->name])
+                    ->toArray(),
+                key: '',
+                value: 'All')
+        ]);
+    }
+
+    public function show(Task $task): Response
+    {
+        return Inertia::render('Task/Show', [
+            'task' => TaskResource::make($task),
+            'hours' => TaskSpentTime::where('task_id', $task->id)->sum('time')
         ]);
     }
 
@@ -51,9 +49,12 @@ class TaskController extends Controller
         ]);
     }
 
-    protected function getContracts(): JsonResource
+    protected function getContracts(): array
     {
-        return ContractWithCustomerOptionsResource::collection(Contract::all());
+        return Contract::with('customer')
+            ->get()
+            ->mapWithKeys(fn(Contract $contract) => [$contract->id => $contract->number . ' - ' . $contract->customer->name])
+            ->all();
     }
 
     public function update(Task $task, TaskRequest $request): RedirectResponse
@@ -90,12 +91,5 @@ class TaskController extends Controller
         $task->delete();
 
         return to_route('task.index')->with('success', 'Task `' . $taskName . '` was successfully deleted');
-    }
-
-    public function toggleActive(Request $request): RedirectResponse
-    {
-        Session::put('task.active', !Session::get('task.active', true));
-
-        return redirect(url()->previous());
     }
 }

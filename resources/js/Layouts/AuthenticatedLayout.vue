@@ -31,9 +31,15 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :active="route().current('task.index')" :href="route('task.index')">
+                                <NavLink :active="$page.component.startsWith('Task/')" :href="route('task.index')">
                                     Task
                                 </NavLink>
+                                <NavLink :active="$page.component.startsWith('TaskSpentTime/')" :href="route('taskSpentTime.index')">
+                                    Time
+                                </NavLink>
+                              <NavLink :active="$page.component.startsWith('Invoice/')" :href="route('invoice.index')">
+                                    Invoice
+                              </NavLink>
                             </div>
                         </div>
 
