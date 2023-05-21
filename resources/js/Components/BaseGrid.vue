@@ -254,7 +254,7 @@ const filterableColumns = computed(() => {
         <thead class="text-base text-gray-200 bg-gray-700 border-b border-gray-600">
         <tr>
           <!-- Columns header -->
-          <th v-for="column in columns" :key="column.name" class="px-6 py-4" scope="col">
+          <th v-for="column in columns" :key="column.name" class="px-4 py-4" scope="col">
                         <span class="flex items-center gap-2">
                             <span>
                                 <BarsArrowUpIcon v-if="getColumnSortOrder(column.name) === 'asc'"

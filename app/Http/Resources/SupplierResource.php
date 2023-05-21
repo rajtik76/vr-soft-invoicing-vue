@@ -2,12 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin Customer */
-class CustomerResource extends JsonResource
+/** @mixin \App\Models\Supplier */
+class SupplierResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
@@ -15,8 +14,8 @@ class CustomerResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
 
-            'company' => CompanyDetailResource::make($this->company),
             'address' => AddressResource::make($this->address),
+            'company' => CompanyDetailResource::make($this->company)
         ];
     }
 }

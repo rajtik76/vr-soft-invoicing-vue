@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Grid\TaskShowController;
 use App\Http\Controllers\Grid\TaskSpentTimesController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskSpentTimeController;
@@ -38,6 +39,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Task spent time
     Route::resource('/taskSpentTime', TaskSpentTimeController::class);
 
+    // Invoice
+    Route::resource('/invoice', InvoiceController::class)->except(['edit', 'update']);
+
     // Grids
     Route::prefix('/grid')->name('grid.')->group(function () {
 
@@ -49,6 +53,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Task show grid
         Route::post('/task/show', TaskShowController::class)->name('task.show');
+
+        // Invoice grid
+        Route::post('/invoice', \App\Http\Controllers\Grid\InvoiceController::class)->name('invoice');
 
     });
 
