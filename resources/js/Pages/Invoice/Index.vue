@@ -29,7 +29,7 @@ const {confirmDialog} = useConfirmDialog()
 function deleteRecord(id: number): void {
     if (confirmDialog()) {
         router.delete(route('invoice.destroy', {invoice: id}), {
-            onSuccess: () => grid.value.updateGrid()
+            onSuccess: () => grid.value?.updateGrid()
         })
     }
 }
