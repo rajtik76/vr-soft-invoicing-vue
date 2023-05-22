@@ -3,6 +3,7 @@
 import {ContractResource, ReportResource} from "@/types/resource";
 import {computed} from "vue";
 import {getCzechTranslation, getEnglishTranslation} from "@/Pages/Report/Partials/reportTranslations";
+import {Head} from "@inertiajs/vue3";
 
 const props = defineProps<{
     reportDate: string,
@@ -29,6 +30,8 @@ function getDayTotal(date: string) {
 </script>
 
 <template>
+    <Head :title="`Monthly overview ${reportDate}`"/>
+
     <div class="p-6">
 
         <div class="border-8 border-gray-400 rounded-lg p-8">

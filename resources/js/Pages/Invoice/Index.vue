@@ -41,7 +41,7 @@ function showRecord(id: number): void {
 </script>
 
 <template>
-    <Head title="Time Tracking List"/>
+    <Head title="Invoice List"/>
 
     <AuthenticatedLayout>
         <template #header>

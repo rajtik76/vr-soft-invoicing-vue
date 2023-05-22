@@ -10,7 +10,7 @@ export interface ReportTranslations {
 
 export function getEnglishTranslation(): ReportTranslations {
     return {
-        title: 'Time log overview',
+        title: 'Monthly overview of the hours worked',
         customer: 'Customer',
         hours: 'Hours',
         date: 'Date',

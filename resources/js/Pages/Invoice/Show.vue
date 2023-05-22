@@ -7,6 +7,7 @@ import InvoiceGridItemLeftAndRight from "@/Pages/Invoice/Partials/InvoiceGridIte
 import InvoiceGridContent from "@/Pages/Invoice/Partials/InvoiceGridContent.vue";
 import {computed, ComputedRef} from "vue";
 import {getCzechTranslation, getEnglishTranslation} from "@/Pages/Invoice/Partials/invoiceTranslations";
+import {Head} from "@inertiajs/vue3";
 
 const props = defineProps<{
     invoice: InvoiceResource
@@ -25,6 +26,8 @@ const texts = computed(() => {
 </script>
 
 <template>
+    <Head :title="`Invoice ${invoice.number}`"/>
+
     <div class="grid grid-cols-2 gap-4 p-4">
 
         <!-- Invoice number -->

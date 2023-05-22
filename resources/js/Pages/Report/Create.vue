@@ -26,7 +26,7 @@ function goBack() {
 
 <template>
 
-    <Head title="Create Invoice"/>
+    <Head title="Create Report"/>
 
     <AuthenticatedLayout>
         <template #header>
