@@ -44,7 +44,7 @@ const texts = computed(() => {
             unit_price: 'Sazba',
             quantity: 'Hodin',
             amount: 'Částka',
-            invoice_based_on_contract_1: 'Na základě smlouvy ze dne',
+            invoice_based_on_contract_1: 'Na základě rámcové smlouvy o dílo ze dne',
             invoice_based_on_contract_2: 'Vám fakturuji za odvedenou práci na níže uvedených úkolech',
             subtotal: 'Mezisoučet',
             total: 'Celkem',
