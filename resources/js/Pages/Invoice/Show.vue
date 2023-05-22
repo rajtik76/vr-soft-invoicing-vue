@@ -6,6 +6,7 @@ import InvoiceGridItem from "@/Pages/Invoice/Partials/InvoiceGridItem.vue";
 import InvoiceGridItemLeftAndRight from "@/Pages/Invoice/Partials/InvoiceGridItemLeftAndRight.vue";
 import InvoiceGridContent from "@/Pages/Invoice/Partials/InvoiceGridContent.vue";
 import {computed, ComputedRef} from "vue";
+import {getCzechTranslation, getEnglishTranslation} from "@/Pages/Invoice/Partials/invoiceTranslations";
 
 const props = defineProps<{
     invoice: InvoiceResource
@@ -15,75 +16,9 @@ const nonCzechInvoice: ComputedRef<boolean> = computed(() => props.invoice.curre
 
 const texts = computed(() => {
     if (!nonCzechInvoice.value) {
-        return {
-            panels: {
-                supplier: 'Odběratel',
-                customer: 'Dodavatel',
-                payment: 'Platba',
-                dates: 'Datumy',
-                description: 'Popis',
-            },
-
-            invoice_title: 'Faktura č.',
-            mobile: 'mobil',
-            supplier_is_registered: 'Dodavatel je registrován v živnostenském obchodním rejstříku.',
-            registration_number: 'IČO',
-            vat_number: 'DIČ',
-            vat_reverse_charge_1: '',
-            vat_reverse_charge_2: '',
-
-            bank_name: 'Banka',
-            account_number: 'Číslo účtu',
-            iban: 'IBAN',
-            swift: 'SWIFT',
-            reference_id: 'Variabilní symbol',
-
-            issue_date: 'Datum vystavení',
-            due_date: 'Datum plnění',
-
-            unit_price: 'Sazba',
-            quantity: 'Hodin',
-            amount: 'Částka',
-            invoice_based_on_contract_1: 'Na základě rámcové smlouvy o dílo ze dne',
-            invoice_based_on_contract_2: 'Vám fakturuji za odvedenou práci na níže uvedených úkolech',
-            subtotal: 'Mezisoučet',
-            total: 'Celkem',
-        }
-    }
-
-    return {
-        panels: {
-            supplier: 'Supplier',
-            customer: 'Customer',
-            payment: 'Payment',
-            dates: 'Dates',
-            description: 'Description',
-        },
-
-        invoice_title: 'Invoice #',
-        mobile: 'mobile',
-        supplier_is_registered: 'The supplier is registered in the Trade Register.',
-        registration_number: 'Registration number',
-        vat_number: 'VAT number',
-        vat_reverse_charge_1: 'VAT is handled in reverse charge mode.',
-        vat_reverse_charge_2: 'The amount of VAT is obligated to be added and declared by the customer.',
-
-        bank_name: 'Bank name',
-        account_number: 'Account number',
-        iban: 'IBAN',
-        swift: 'SWIFT',
-        reference_id: 'Reference ID',
-
-        issue_date: 'Issue date',
-        due_date: 'Due date',
-
-        unit_price: 'Unit price',
-        quantity: 'QTY',
-        amount: 'Amount',
-        invoice_based_on_contract_1: 'On the basis of the contract of work dated',
-        invoice_based_on_contract_2: 'I hereby invoice you the work done on the following tasks',
-        subtotal: 'Subtotal',
-        total: 'Total',
+        return getCzechTranslation()
+    } else {
+        return getEnglishTranslation()
     }
 })
 
@@ -247,8 +182,10 @@ const texts = computed(() => {
             <!-- contract statement -->
             <InvoiceGridContent>
                 <template #item>
-                    {{ texts.invoice_based_on_contract_1 }}: {{ invoice.contract.signed_at }},
-                    {{ texts.invoice_based_on_contract_2 }}:
+                    <div class="mr-4">
+                        {{ texts.invoice_based_on_contract_1 }}: {{ invoice.contract.signed_at }},
+                        {{ texts.invoice_based_on_contract_2 }}:
+                    </div>
                 </template>
             </InvoiceGridContent>
 
