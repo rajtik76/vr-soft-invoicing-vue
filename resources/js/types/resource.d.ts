@@ -103,3 +103,11 @@ export interface InvoiceResource {
     created_at: string,
     contract: ContractResource,
 }
+
+export interface ReportResource {
+    date: string,
+    time: number,
+    note: string | null,
+
+    task: TaskResource,
+}

@@ -4,6 +4,7 @@ use App\Http\Controllers\Grid\TaskShowController;
 use App\Http\Controllers\Grid\TaskSpentTimesController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskSpentTimeController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Invoice
     Route::resource('/invoice', InvoiceController::class)->except(['edit', 'update']);
+
+    // Report
+    Route::get('/report', [ReportController::class, 'create'])->name('report.create');
+    Route::post('/report', [ReportController::class, 'show'])->name('report.show');
 
     // Grids
     Route::prefix('/grid')->name('grid.')->group(function () {
