@@ -13,7 +13,7 @@ const total = computed(() => {
     return props.taskSpentTimes.reduce((accumulator, value) => accumulator + value.time, 0)
 })
 
-function getDayTotal(date) {
+function getDayTotal(date: string) {
     return props.taskSpentTimes.reduce((accumulator, value) => accumulator + (value.date === date ? value.time : 0), 0)
 }
 
