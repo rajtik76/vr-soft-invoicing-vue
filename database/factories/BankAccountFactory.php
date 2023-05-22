@@ -23,7 +23,7 @@ class BankAccountFactory extends Factory
             'number' => fake()->randomNumber(9, true),
             'iban' => fake()->iban(),
             'swift' => fake()->text(6),
-            'currency' => BankAccountCurrencyEnum::EUR,
+            'currency' => fake()->randomElement(BankAccountCurrencyEnum::cases()),
         ];
     }
 }

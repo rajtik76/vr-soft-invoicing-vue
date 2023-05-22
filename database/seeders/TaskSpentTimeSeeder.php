@@ -11,7 +11,7 @@ class TaskSpentTimeSeeder extends Seeder
     public function run()
     {
         foreach (Task::all() as $task) {
-            TaskSpentTime::factory(fake()->numberBetween(5, 20))->create(['task_id' => $task->id]);
+            TaskSpentTime::factory(fake()->numberBetween(1, 5))->create(['task_id' => $task->id]);
         }
     }
 }

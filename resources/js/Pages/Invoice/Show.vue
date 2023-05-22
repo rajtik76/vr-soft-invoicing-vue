@@ -282,19 +282,20 @@ const texts = computed(() => {
                             invoice.content.reduce((accumulator, currentValue) => accumulator + currentValue.hours, 0).toFixed(1)
                         }}
                     </div>
-                    <div class="text-right">
+                    <div class="text-right normal-case">
                         {{ invoice.total_amount.toLocaleString() }} {{ invoice.currency_symbol }}
                     </div>
                 </div>
             </template>
         </InvoiceGridPanel>
 
-        <!-- Total -->
-        <div class="grid grid-cols-12 col-span-2 pt-8">
-            <div
-                class="uppercase font-bold text-5xl col-end-13 col-span-5 border-4 border-gray-500 rounded-xl p-4 text-right bg-gray-200">
-                {{ texts.total }}: {{ invoice.total_amount.toLocaleString() }} {{ invoice.currency_symbol }}
-            </div>
+    </div>
+
+    <!-- Total -->
+    <div class="flex justify-end mr-4 py-4">
+        <div class="font-bold text-5xl border-4 border-gray-500 rounded-xl p-4 text-right bg-gray-200">
+            <span class="uppercase">{{ texts.total }}: {{ invoice.total_amount.toLocaleString() }}</span>
+            {{ invoice.currency_symbol }}
         </div>
     </div>
 </template>

@@ -12,7 +12,7 @@ class TaskSpentTimeFactory extends Factory
         return [
             'task_id' => Task::factory(),
             'date' => fake()->dateTimeBetween('-3 months'),
-            'time' => fake()->randomFloat(1, 1, 100),
+            'time' => fake()->randomFloat(1, 1, 10),
             'note' => fake()->sentence(),
         ];
     }

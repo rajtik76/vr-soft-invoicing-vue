@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Contract;
-use App\Models\Enums\BankAccountCurrencyEnum;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -15,6 +14,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class InvoiceFactory extends Factory
 {
+    protected Contract $contract;
+
     /**
      * Define the model's default state.
      *
@@ -38,12 +39,16 @@ class InvoiceFactory extends Factory
             'number' => $date->year . sprintf('%02d', $date->month) . fake()->unique()->randomNumber(3, true),
             'year' => $date->year,
             'month' => $date->month,
-            'issue_date' => fake()->date(),
-            'due_date' => fake()->date(),
+            'issue_date' => fake()->dateTimeBetween(now()->subYear()),
+            'due_date' => fn(array $attributes) => (new Carbon($attributes['issue_date']))->clone()->addDays(7),
             'content' => $contentArray,
-            'price_per_unit' => fn(array $attributes) => Contract::find($attributes['contract_id'])->price_per_unit,
+            'price_per_unit' => function (array $attributes) {
+                $this->contract = Contract::findOrFail($attributes['contract_id']);
+
+                return $this->contract->price_per_unit;
+            },
             'total_amount' => fn(array $attributes) => collect($attributes['content'])->sum(fn($item) => $item['hours']) * $attributes['price_per_unit'],
-            'currency' => fake()->randomElement(BankAccountCurrencyEnum::cases()),
+            'currency' => fn(array $attributes) => $this->contract->bank->currency,
         ];
     }
 }

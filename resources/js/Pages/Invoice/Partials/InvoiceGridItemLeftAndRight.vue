@@ -7,6 +7,8 @@ import InvoiceGridItem from "@/Pages/Invoice/Partials/InvoiceGridItem.vue";
 <template>
     <InvoiceGridItem class="grid grid-flow-col auto-cols-fr">
         <slot name="left" />
-        <slot name="right" />
+        <div class="text-right">
+            <slot name="right" />
+        </div>
     </InvoiceGridItem>
 </template>
