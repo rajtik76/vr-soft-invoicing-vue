@@ -63,12 +63,13 @@ function getDayTotal(date: string) {
                 <div v-if="index < taskSpentTimes.length && ((taskSpentTime.date !== taskSpentTimes[index + 1]?.date) || (index === taskSpentTimes.length))"
                      class="px-8 py-4 uppercase font-bold text-lg bg-slate-100 my-6 rounded-lg">
                     <div class="grid grid-cols-12 gap-4">
-                        <div>{{ taskSpentTimes[index - 1].date }}</div>
+                        <div>{{ taskSpentTime.date }}</div>
                         <div>Total</div>
                         <div class="col-span-5"></div>
-                        <div>{{ getDayTotal(taskSpentTimes[index - 1].date).toFixed(1) }}</div>
+                        <div>{{ getDayTotal(taskSpentTime.date).toFixed(1) }}</div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
