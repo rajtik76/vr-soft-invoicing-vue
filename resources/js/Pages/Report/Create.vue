@@ -93,7 +93,7 @@ function goBack() {
 
                             <div class="flex items-center gap-4 justify-between">
                                 <PrimaryButton @click.prevent="goBack">Back</PrimaryButton>
-                                <PrimaryButton :disabled="form.processing" type="submit">Save</PrimaryButton>
+                                <PrimaryButton :disabled="form.processing" type="submit">Show</PrimaryButton>
                             </div>
                         </form>
                     </section>
