@@ -22,7 +22,7 @@ const form = useForm({
     contract_id: null,
     number: null,
     year: new Date().getFullYear(),
-    month: new Date().getMonth(),
+    month: new Date().getMonth() + 1,
     issue_date: new Date().toISOString().split('T')[0],
     due_date: getIssueDate().toISOString().split('T')[0],
 })
