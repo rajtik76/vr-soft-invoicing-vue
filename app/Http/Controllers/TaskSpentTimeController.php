@@ -38,7 +38,7 @@ class TaskSpentTimeController extends Controller
 
         $taskSpentTime->update($request->validated());
 
-        return to_route('taskSpentTime.index')->with('success', "TaskSpentTime record from {$taskSpentTime->date->toDateString()} for task {$taskSpentTime->task->name} was successfully updated");
+        return to_route('task.show', $taskSpentTime->task_id)->with('success', "TaskSpentTime record from {$taskSpentTime->date->toDateString()} for task {$taskSpentTime->task->name} was successfully updated");
     }
 
     public function create(): Response
@@ -65,7 +65,7 @@ class TaskSpentTimeController extends Controller
     {
         $taskSpentTime = TaskSpentTime::create($request->validated());
 
-        return to_route('taskSpentTime.index')->with('success', "Time log with amount {$taskSpentTime->time} hours for task {$taskSpentTime->task->name} was successfully created");
+        return to_route('task.show', $taskSpentTime->task_id)->with('success', "Time log with amount {$taskSpentTime->time} hours for task {$taskSpentTime->task->name} was successfully created");
     }
 
     public function destroy(TaskSpentTime $taskSpentTime): RedirectResponse

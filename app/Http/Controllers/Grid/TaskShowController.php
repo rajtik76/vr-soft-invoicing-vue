@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskSpentTimeResource;
 use App\Models\TaskSpentTime;
 use App\Services\GridComponentHandler;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class TaskShowController extends Controller
@@ -19,8 +20,13 @@ class TaskShowController extends Controller
                     TaskSpentTime::query()
                         ->with('task')
                         ->where('task_id', request('task_id'))
-                        ->whereHas('task', fn($query) => $query->where('user_id', Auth::id()))
+                        ->whereHas('task', fn ($query) => $query->where('user_id', Auth::id()))
                 )
+                ->setSortClosure('date', function (Builder $builder, string $order) {
+                    $builder
+                        ->orderBy('date', $order)
+                        ->orderBy('created_at', $order);
+                })
         );
     }
 }

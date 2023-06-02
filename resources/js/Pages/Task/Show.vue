@@ -39,7 +39,7 @@ function deleteTimeLogRecordWithHook(id: number) {
           Task: <span class="text-gray-200">{{ task.name }}</span>
         </div>
         <div>
-          Total: <span class="text-gray-200">{{ hours }}</span> hours
+          Total: <span class="text-gray-200">{{ hours.toFixed(1) }}</span> hours
         </div>
       </h2>
     </template>
