@@ -11,7 +11,7 @@ export function useTaskSpentTimeGrid() {
     ]
 
     const deleteTimeRecord = function (id: number, onSuccess: () => void): void {
-        if (useConfirmDialog()) {
+        if (useConfirmDialog().confirmDialog()) {
             router.delete(route('taskSpentTime.destroy', {taskSpentTime: id}), {
                 onSuccess: () => onSuccess()
             })
