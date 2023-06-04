@@ -9,7 +9,6 @@ const props = defineProps<{
 const displayFlashMessage = ref(true)
 
 onMounted(() => {
-    console.log('Flash: ', props.message.length > 0 && displayFlashMessage.value)
     if (props.message.length > 0 && displayFlashMessage.value) {
         setTimeout(function () {
             displayFlashMessage.value = false
