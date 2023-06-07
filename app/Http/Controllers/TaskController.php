@@ -21,10 +21,11 @@ class TaskController extends Controller
         return Inertia::render('Task/Index', [
             'contracts' => Arr::add(
                 array: Contract::all()
-                    ->mapWithKeys(fn(Contract $contract, $key) => [$contract->id => $contract->customer->name])
+                    ->mapWithKeys(fn (Contract $contract, $key) => [$contract->id => $contract->customer->name])
                     ->toArray(),
                 key: '',
-                value: 'All')
+                value: 'All'
+            )
         ]);
     }
 
@@ -53,7 +54,7 @@ class TaskController extends Controller
     {
         return Contract::with('customer')
             ->get()
-            ->mapWithKeys(fn(Contract $contract) => [$contract->id => $contract->number . ' - ' . $contract->customer->name])
+            ->mapWithKeys(fn (Contract $contract) => [$contract->id => $contract->number . ' - ' . $contract->customer->name])
             ->all();
     }
 

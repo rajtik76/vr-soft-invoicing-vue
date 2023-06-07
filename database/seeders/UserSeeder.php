@@ -9,6 +9,12 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory(5)->create();
+        User::factory()->create([
+            'name' => config('app.user_seeder.name'),
+            'email' => config('app.user_seeder.email'),
+            'admin' => true,
+        ]);
+
+        User::factory(2)->create();
     }
 }

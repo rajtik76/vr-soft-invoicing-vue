@@ -28,7 +28,7 @@ class ContractFactory extends Factory
             'bank_account_id' => BankAccount::factory(),
             'number' => fake()->creditCardNumber(),
             'signed_at' => fake()->date(),
-            'price_per_unit' => function(array $attributes) {
+            'price_per_unit' => function (array $attributes) {
                 $bankAccount = BankAccount::findOrFail($attributes['bank_account_id']);
 
                 return match($bankAccount->currency) {

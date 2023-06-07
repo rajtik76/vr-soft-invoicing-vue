@@ -18,8 +18,9 @@ class InvoiceController extends Controller
             $handler
                 ->setResource(InvoiceResource::class)
                 ->setBuilder(Invoice::query()->with('contract'))
-                ->setSortClosure('date',
-                    fn(Builder $builder, string $order) => $builder->orderByRaw('CONCAT(year, month) ' . Str::upper($order))
+                ->setSortClosure(
+                    'date',
+                    fn (Builder $builder, string $order) => $builder->orderByRaw('CONCAT(year, month) ' . Str::upper($order))
                 )
         );
     }

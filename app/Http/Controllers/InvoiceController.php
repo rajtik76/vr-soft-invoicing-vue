@@ -23,7 +23,7 @@ class InvoiceController extends Controller
         return Inertia::render('Invoice/Create', [
             'contracts' => Contract::all()
                 ->mapWithKeys(
-                    fn(Contract $contract, $key) => [$contract->id => $contract->customer->name]
+                    fn (Contract $contract, $key) => [$contract->id => $contract->customer->name]
                 )
                 ->toArray()
         ]);

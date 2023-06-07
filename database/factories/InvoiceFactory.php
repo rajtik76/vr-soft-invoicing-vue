@@ -40,15 +40,15 @@ class InvoiceFactory extends Factory
             'year' => $date->year,
             'month' => $date->month,
             'issue_date' => fake()->dateTimeBetween(now()->subYear()),
-            'due_date' => fn(array $attributes) => (new Carbon($attributes['issue_date']))->clone()->addDays(7),
+            'due_date' => fn (array $attributes) => (new Carbon($attributes['issue_date']))->clone()->addDays(7),
             'content' => $contentArray,
             'price_per_unit' => function (array $attributes) {
                 $this->contract = Contract::findOrFail($attributes['contract_id']);
 
                 return $this->contract->price_per_unit;
             },
-            'total_amount' => fn(array $attributes) => collect($attributes['content'])->sum(fn($item) => $item['hours']) * $attributes['price_per_unit'],
-            'currency' => fn(array $attributes) => $this->contract->bank->currency,
+            'total_amount' => fn (array $attributes) => collect($attributes['content'])->sum(fn ($item) => $item['hours']) * $attributes['price_per_unit'],
+            'currency' => fn (array $attributes) => $this->contract->bank->currency,
         ];
     }
 }

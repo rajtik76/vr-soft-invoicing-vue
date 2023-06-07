@@ -17,7 +17,7 @@ class ReportController extends Controller
     {
         return Inertia::render('Report/Create', [
             'contracts' => Contract::all()
-                ->mapWithKeys(fn(Contract $contract, $key) => [$contract->id => $contract->customer->name])
+                ->mapWithKeys(fn (Contract $contract, $key) => [$contract->id => $contract->customer->name])
                 ->toArray()
         ]);
     }
@@ -33,8 +33,9 @@ class ReportController extends Controller
                 TaskSpentTime::with('task')
                     ->whereYear('date', $validated['year'])
                     ->whereMonth('date', $validated['month'])
-                    ->whereHas('task',
-                        fn(Builder $query) => $query->where('contract_id', $validated['contract_id'])
+                    ->whereHas(
+                        'task',
+                        fn (Builder $query) => $query->where('contract_id', $validated['contract_id'])
                     )
                     ->orderBy('date')
                     ->orderBy('task_id')

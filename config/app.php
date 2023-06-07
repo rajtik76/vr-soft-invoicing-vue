@@ -185,4 +185,17 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Application Custom Variables
+    |--------------------------------------------------------------------------
+    |
+    | Application specific variables
+    |
+    */
+
+    'user_seeder' => [
+        'name' => env('SEEDER_USER_NAME', 'Admin User'),
+        'email' => env('SEEDER_USER_EMAIL', 'admin@invoice.local'),
+    ],
 ];

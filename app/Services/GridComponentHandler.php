@@ -82,7 +82,7 @@ class GridComponentHandler implements JsonSerializable
             function (Builder $builder, Closure $next) {
                 if ($this->sort) {
                     collect($this->sort)->each(
-                        fn(string $order, string $column) => Arr::has($this->sortClosure, $column)
+                        fn (string $order, string $column) => Arr::has($this->sortClosure, $column)
                             ? call_user_func_array($this->sortClosure[$column], ['builder' => $builder, 'order' => $order])
                             : $builder->orderBy($column, $order)
                     );
@@ -93,7 +93,7 @@ class GridComponentHandler implements JsonSerializable
             // Search
             function (Builder $builder, Closure $next) {
                 if ($this->searchClosure && $this->search) {
-                    collect($this->searchClosure)->each(fn(Closure $sort, string $column) => call_user_func_array($sort, ['search' => $this->search, 'builder' => $builder]));
+                    collect($this->searchClosure)->each(fn (Closure $sort, string $column) => call_user_func_array($sort, ['search' => $this->search, 'builder' => $builder]));
                 }
 
                 return $next($builder);
@@ -103,10 +103,10 @@ class GridComponentHandler implements JsonSerializable
                 if ($this->filter) {
                     collect($this->filter)
                         ->filter(
-                            fn($filter) => !(is_null($filter) || $filter === '')
+                            fn ($filter) => !(is_null($filter) || $filter === '')
                         )
                         ->each(
-                            fn(string $value, string $column) => Arr::has($this->filterClosure, $column)
+                            fn (string $value, string $column) => Arr::has($this->filterClosure, $column)
                                 ? call_user_func_array($this->filterClosure[$column], ['builder' => $builder, 'value' => $value])
                                 : $builder->where($column, $value)
                         );
