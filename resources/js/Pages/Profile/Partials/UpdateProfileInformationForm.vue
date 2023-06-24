@@ -84,7 +84,7 @@ const form = useForm({
             <div class="flex items-center gap-4">
                 <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
 
-                <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
+                <Transition>
                     <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
                 </Transition>
             </div>
