@@ -21,7 +21,6 @@ onMounted(() => {
   }
 
   if (props.pickFirstOnNull && props.modelValue === null && sortedOptions.value.length > 0) {
-    console.log(sortedOptions.value)
     emit('update:modelValue', sortedOptions.value[0][0])
   }
 });

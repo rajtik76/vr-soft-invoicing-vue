@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TimeSpentTimeRequest;
@@ -7,6 +9,7 @@ use App\Http\Resources\TaskSpentTimeResource;
 use App\Models\Task;
 use App\Models\TaskSpentTime;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -30,6 +33,14 @@ class TaskSpentTimeController extends Controller
         ]);
     }
 
+    protected function getTaskOptionsArray(): array
+    {
+        return Task::where('user_id', Auth::id())
+            ->where('active', true)
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
     public function update(TaskSpentTime $taskSpentTime, TimeSpentTimeRequest $request): RedirectResponse
     {
         if (!Auth::user()->can('update', $taskSpentTime)) {
@@ -39,6 +50,13 @@ class TaskSpentTimeController extends Controller
         $taskSpentTime->update($request->validated());
 
         return to_route('task.show', $taskSpentTime->task_id)->with('success', "TaskSpentTime record from {$taskSpentTime->date->toDateString()} for task {$taskSpentTime->task->name} was successfully updated");
+    }
+
+    public function store(TimeSpentTimeRequest $request): RedirectResponse
+    {
+        $taskSpentTime = TaskSpentTime::create(Arr::add($request->validated(), 'user_id', Auth::id()));
+
+        return to_route('task.show', $taskSpentTime->task_id)->with('success', "Time log with amount {$taskSpentTime->time} hours for task {$taskSpentTime->task->name} was successfully created");
     }
 
     public function create(): Response
@@ -61,13 +79,6 @@ class TaskSpentTimeController extends Controller
         ]);
     }
 
-    public function store(TimeSpentTimeRequest $request): RedirectResponse
-    {
-        $taskSpentTime = TaskSpentTime::create($request->validated());
-
-        return to_route('task.show', $taskSpentTime->task_id)->with('success', "Time log with amount {$taskSpentTime->time} hours for task {$taskSpentTime->task->name} was successfully created");
-    }
-
     public function destroy(TaskSpentTime $taskSpentTime): RedirectResponse
     {
         $hours = $taskSpentTime->time;
@@ -75,13 +86,5 @@ class TaskSpentTimeController extends Controller
         $taskSpentTime->delete();
 
         return back()->with('success', "Time log with amount {$hours} was successfully deleted");
-    }
-
-    protected function getTaskOptionsArray(): array
-    {
-        return Task::where('user_id', Auth::id())
-            ->where('active', true)
-            ->pluck('name', 'id')
-            ->toArray();
     }
 }

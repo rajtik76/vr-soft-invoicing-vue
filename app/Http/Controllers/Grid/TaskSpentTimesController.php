@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Grid;
 
 use App\Http\Controllers\Controller;
@@ -18,11 +20,8 @@ class TaskSpentTimesController extends Controller
                 ->setResource(TaskSpentTimeResource::class)
                 ->setBuilder(
                     TaskSpentTime::query()
-                    ->with('task')
-                    ->whereHas(
-                        'task',
-                        fn ($query) => $query->where('user_id', Auth::id())->where('active', true)
-                    )
+                        ->with('task')
+                        ->where('user_id', Auth::id())
                 )
         );
     }

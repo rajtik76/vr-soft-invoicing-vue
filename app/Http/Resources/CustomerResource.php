@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
 use App\Models\Customer;
@@ -15,7 +17,7 @@ class CustomerResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
 
-            'company' => CustomerDetailResource::make($this->company),
+            'company' => CompanyDetailResource::make($this->company),
             'address' => AddressResource::make($this->address),
         ];
     }

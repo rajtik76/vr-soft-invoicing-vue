@@ -49,19 +49,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Grids
     Route::prefix('/grid')->name('grid.')->group(function () {
-
         // TaskSpentTime log grid
         Route::post('/taskSpentTime', TaskSpentTimesController::class)->name('taskSpentTime');
-
         // Task grid
         Route::post('/task', \App\Http\Controllers\Grid\TaskController::class)->name('task');
-
         // Task show grid
         Route::post('/task/show', TaskShowController::class)->name('task.show');
-
         // Invoice grid
         Route::post('/invoice', \App\Http\Controllers\Grid\InvoiceController::class)->name('invoice');
-
     });
 
 });
