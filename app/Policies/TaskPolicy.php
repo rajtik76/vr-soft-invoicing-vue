@@ -20,10 +20,10 @@ class TaskPolicy
         return $this->view($user, $task);
     }
 
-//    public function create(User $user): bool
-//    {
-//    }
-//
+    //    public function create(User $user): bool
+    //    {
+    //    }
+    //
 
     public function view(User $user, Task $task): bool
     {
@@ -34,12 +34,12 @@ class TaskPolicy
     {
         return $task->user_id;
     }
-//
-//    public function restore(User $user, Task $task): bool
-//    {
-//    }
-//
-//    public function forceDelete(User $user, Task $task): bool
-//    {
-//    }
+    //
+    //    public function restore(User $user, Task $task): bool
+    //    {
+    //    }
+    //
+    //    public function forceDelete(User $user, Task $task): bool
+    //    {
+    //    }
 }
