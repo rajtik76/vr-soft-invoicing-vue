@@ -15,7 +15,7 @@ class CustomerResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
 
-            'company' => CompanyDetailResource::make($this->company),
+            'company' => CustomerDetailResource::make($this->company),
             'address' => AddressResource::make($this->address),
         ];
     }

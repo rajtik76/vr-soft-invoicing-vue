@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Task;
@@ -11,7 +13,10 @@ class TaskSpentTimeSeeder extends Seeder
     public function run()
     {
         foreach (Task::all() as $task) {
-            TaskSpentTime::factory(fake()->numberBetween(1, 5))->create(['task_id' => $task->id]);
+            TaskSpentTime::factory(fake()->numberBetween(1, 5))->create([
+                'user_id' => $task->user_id,
+                'task_id' => $task->id
+            ]);
         }
     }
 }

@@ -15,7 +15,7 @@ class SupplierResource extends JsonResource
             'name' => $this->name,
 
             'address' => AddressResource::make($this->address),
-            'company' => CompanyDetailResource::make($this->company)
+            'company' => CustomerDetailResource::make($this->company)
         ];
     }
 }

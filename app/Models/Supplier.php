@@ -21,6 +21,6 @@ class Supplier extends Model
 
     public function company(): BelongsTo
     {
-        return $this->belongsTo(CompanyDetail::class, foreignKey: 'company_detail_id');
+        return $this->belongsTo(CustomerDetail::class, foreignKey: 'company_detail_id');
     }
 }

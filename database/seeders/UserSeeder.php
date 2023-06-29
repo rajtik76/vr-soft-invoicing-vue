@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -12,7 +14,6 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => config('app.user_seeder.name'),
             'email' => config('app.user_seeder.email'),
-            'admin' => true,
         ]);
 
         User::factory(2)->create();
