@@ -38,7 +38,7 @@ export function getEnglishTranslation(): InvoiceShowTranslation {
         panels: {
             supplier: 'Supplier',
             customer: 'Customer',
-            payment: 'Payment',
+            payment: 'Payment Advice',
             dates: 'Dates',
             description: 'Description',
         },

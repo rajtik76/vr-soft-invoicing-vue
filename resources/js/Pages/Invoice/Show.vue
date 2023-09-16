@@ -113,7 +113,7 @@ const texts = computed(() => {
             </div>
         </InvoiceGridPanel>
 
-        <!-- Payment -->
+        <!-- Payment advice -->
         <InvoiceGridPanel :background="'bg-orange-200'" class="border-orange-200">
 
             <template #title>{{ texts.panels.payment }}</template>
